@@ -29,12 +29,12 @@
   },
   "buttons": [
     {
-      "label": "Shop Collection",
+      "label": "Coming Soon",
       "action": "#",
       "style": "primary"
     },
     {
-      "label": "View Deals",
+      "label": "Coming Soon",
       "action": "#",
       "style": "secondary"
     }
