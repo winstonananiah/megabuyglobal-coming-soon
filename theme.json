@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "name": "MegaBuy Global",
+    "taglinePrimary": "Future Tech,",
+    "taglineSecondary": "Delivered Today.",
+    "description": "Experience the cutting edge of technology. Premium gadgets, accessories, and gear for the modern professional."
+  },
+  "colors": {
+    "background": "#0b0b0d",
+    "gradientStart": "#2b0f14",
+    "gradientEnd": "#000000",
+    "primaryText": "#ffffff",
+    "accentText": "#b11226",
+    "buttonPrimary": "#b11226",
+    "buttonSecondary": "#1a1a1a"
+  },
+  "animation": {
+    "headline": {
+      "enabled": true,
+      "type": "slide-up-fade",
+      "durationMs": 1200,
+      "delayMs": 300
+    },
+    "accentText": {
+      "enabled": true,
+      "type": "glow-pulse",
+      "durationMs": 2000
+    }
+  },
+  "buttons": [
+    {
+      "label": "Shop Collection",
+      "action": "#",
+      "style": "primary"
+    },
+    {
+      "label": "View Deals",
+      "action": "#",
+      "style": "secondary"
+    }
+  ]
+}
