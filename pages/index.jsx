@@ -3,7 +3,7 @@ import theme from "../theme.json";
 
 export default function Home() {
   // ===== Countdown Logic (UTC-safe, works in Zimbabwe & globally) =====
-  const launchDate = new Date("2026-03-01T00:00:00Z");
+  const launchDate = new Date("2026-02-27T00:00:00Z");
 
   const getTimeLeft = () => {
     const now = new Date();
