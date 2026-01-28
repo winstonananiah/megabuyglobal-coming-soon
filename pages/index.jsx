@@ -1,87 +1,180 @@
 import { useEffect, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
+import theme from "../theme.json";
 
-const LAUNCH_DATE = new Date("2026-03-01T00:00:00Z");
+export default function Home() {
+  const [mounted, setMounted] = useState(false);
 
-export default function MegaBuyGlobal() {
-    const [timeLeft, setTimeLeft] = useState(getTimeLeft());
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft(getTimeLeft());
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
+  if (!mounted) return null;
 
-    return (
-        <>
-            <Head>
-                <title>MegaBuyGlobal — Coming Soon</title>
-                <meta name="robots" content="noindex, nofollow" />
-            </Head>
+  return (
+    <div className="container">
+      <div className="overlay" />
 
-            <main style={styles.container}>
-                <Image
-                    src="/logo-no-background.jpeg"
-                    alt="MegaBuy Global Logo"
-                    width={280}
-                    height={160}
-                    priority
-                />
+      <main className="content">
+        <img
+          src="/logo-no-background.jpeg"
+          alt="MegaBuy Global"
+          className="logo"
+        />
 
-                <h1 style={styles.title}>We’re launching soon 🚀</h1>
-                <p style={styles.subtitle}>
-                    Launching March 1, 2026
-                </p>
+        <h1 className="headline">
+          <span className="primary">{theme.brand.taglinePrimary}</span>
+          <span className="accent">{theme.brand.taglineSecondary}</span>
+        </h1>
 
-                <div style={styles.countdown}>
-                    {Object.entries(timeLeft).map(([label, value]) => (
-                        <div key={label} style={styles.box}>
-                            <span style={styles.time}>{value}</span>
-                            <span style={styles.label}>{label}</span>
-                        </div>
-                    ))}
-                </div>
-            </main>
-        </>
-    );
+        <p className="description">{theme.brand.description}</p>
+
+        <div className="buttons">
+          {theme.buttons.map((btn) => (
+            <a
+              key={btn.label}
+              href={btn.action}
+              className={`btn ${btn.style}`}
+            >
+              {btn.label}
+            </a>
+          ))}
+        </div>
+
+        <p className="countdown">
+          Launching <strong>1 March 2026</strong>
+        </p>
+      </main>
+
+      <style jsx>{`
+        .container {
+          min-height: 100vh;
+          background: radial-gradient(
+            circle at top,
+            ${theme.colors.gradientStart},
+            ${theme.colors.background}
+          );
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+          color: ${theme.colors.primaryText};
+          font-family: system-ui, -apple-system, BlinkMacSystemFont;
+        }
+
+        .overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to bottom,
+            transparent,
+            ${theme.colors.background}
+          );
+          opacity: 0.6;
+        }
+
+        .content {
+          position: relative;
+          text-align: center;
+          max-width: 720px;
+          padding: 2rem;
+          animation: fadeIn 1.2s ease forwards;
+        }
+
+        .logo {
+          width: 120px;
+          margin: 0 auto 2rem;
+        }
+
+        .headline {
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 800;
+          line-height: 1.1;
+          margin-bottom: 1rem;
+        }
+
+        .primary {
+          display: block;
+          opacity: 0;
+          animation: slideUp 1s ease forwards;
+        }
+
+        .accent {
+          display: block;
+          color: ${theme.colors.accentText};
+          opacity: 0;
+          animation: slideUp 1s ease forwards;
+          animation-delay: 0.3s;
+          text-shadow: 0 0 20px rgba(177, 18, 38, 0.5);
+        }
+
+        .description {
+          color: #b5b5b5;
+          margin: 1.5rem auto 2.5rem;
+          max-width: 520px;
+        }
+
+        .buttons {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          padding: 0.8rem 1.6rem;
+          border-radius: 10px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.25s ease;
+        }
+
+        .btn.primary {
+          background: ${theme.colors.buttonPrimary};
+          color: white;
+        }
+
+        .btn.primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(177, 18, 38, 0.4);
+        }
+
+        .btn.secondary {
+          border: 1px solid #333;
+          color: white;
+          background: transparent;
+        }
+
+        .btn.secondary:hover {
+          background: #111;
+        }
+
+        .countdown {
+          margin-top: 3rem;
+          font-size: 0.9rem;
+          color: #888;
+        }
+
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
+    </div>
+  );
 }
-
-function getTimeLeft() {
-    const diff = LAUNCH_DATE - new Date();
-    if (diff <= 0) return { Days: 0, Hours: 0, Minutes: 0, Seconds: 0 };
-
-    return {
-        Days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        Hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        Minutes: Math.floor((diff / (1000 * 60)) % 60),
-        Seconds: Math.floor((diff / 1000) % 60),
-    };
-}
-
-const styles = {
-    container: {
-        minHeight: "100vh",
-        background: "#020617",
-        color: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        gap: "1.5rem",
-    },
-    title: { fontSize: "2.5rem" },
-    subtitle: { opacity: 0.8 },
-    countdown: { display: "flex", gap: "1rem" },
-    box: {
-        background: "#020617",
-        border: "1px solid #1e293b",
-        padding: "1rem",
-        borderRadius: "10px",
-        minWidth: "80px",
-    },
-    time: { fontSize: "1.8rem", fontWeight: "bold" },
-    label: { fontSize: "0.7rem", opacity: 0.6 },
-};
