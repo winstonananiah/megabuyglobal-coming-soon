@@ -2,13 +2,32 @@ import { useEffect, useState } from "react";
 import theme from "../theme.json";
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false);
+  // ===== Countdown Logic (UTC-safe, works in Zimbabwe & globally) =====
+  const launchDate = new Date("2026-03-01T00:00:00Z");
+
+  const getTimeLeft = () => {
+    const now = new Date();
+    const diff = launchDate - now;
+
+    if (diff <= 0) return null;
+
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((diff / (1000 * 60)) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft());
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    const timer = setInterval(() => {
+      setTimeLeft(getTimeLeft());
+    }, 1000);
 
-  if (!mounted) return null;
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="container">
@@ -40,9 +59,19 @@ export default function Home() {
           ))}
         </div>
 
-        <p className="countdown">
-          Launching <strong>1 March 2026</strong>
-        </p>
+        {timeLeft ? (
+          <p className="countdown">
+            Launching in{" "}
+            <strong>
+              {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m{" "}
+              {timeLeft.seconds}s
+            </strong>
+          </p>
+        ) : (
+          <p className="countdown">
+            <strong>We are live 🚀</strong>
+          </p>
+        )}
       </main>
 
       <style jsx>{`
@@ -82,8 +111,14 @@ export default function Home() {
         }
 
         .logo {
-          width: 120px;
+          width: 180px;
+          height: 180px;
+          object-fit: cover;
+          border-radius: 50%;
           margin: 0 auto 2rem;
+          background: #000;
+          border: 3px solid rgba(177, 18, 38, 0.4);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
 
         .headline {
@@ -151,8 +186,8 @@ export default function Home() {
 
         .countdown {
           margin-top: 3rem;
-          font-size: 0.9rem;
-          color: #888;
+          font-size: 0.95rem;
+          color: #aaa;
         }
 
         @keyframes slideUp {
@@ -178,3 +213,4 @@ export default function Home() {
     </div>
   );
 }
+
